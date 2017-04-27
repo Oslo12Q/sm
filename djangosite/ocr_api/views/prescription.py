@@ -57,7 +57,7 @@ def async_analysis_result(request):
     from sm.data_clear_prescription.main import *
     try:
         handle = handlePrescription()
-        rsp_data = handle.handle('c:/2.docx')
+        rsp_data = handle.handle('c:/test1.docx')
         
         prescription_information, issential_information = rsp_data.get('prescription_information', {}), rsp_data.get('issential_information', [])
         result = dict(prescription_information=prescription_information, issential_information=issential_information)
