@@ -58,9 +58,7 @@ def async_analysis_result(request):
     from sm.data_clear_prescription.main import *
     try:
         handle = handlePrescription()
-        resp_data = handle.handle('c:/test1.docx')
-
-    #    rsp_data = clear('c:/test1.docx')
+        rsp_data = handle.handle('c:/test1.docx')
         
         prescription_information, issential_information = rsp_data.get('prescription_information', {}), rsp_data.get('issential_information', [])
         result = dict(prescription_information=prescription_information, issential_information=issential_information)
@@ -71,14 +69,6 @@ def async_analysis_result(request):
         logging.error(err)
         logging.error(traceback.format_exc())
         return get_json_response(request, dict(status='500', message='data_clear is 500.', data=None))
-
-def dev_test(request):
-    
-    from sm.data_clear_prescription.main import *
-    handle = handlePrescription()
-    resp_data = handle.handle('c:/test1.docx')
-
-    return resp_data
 
 def _get_analysis_result_path(fid):
     for extension in ['.doc', '.pdf', '.xls', '.xlsx']:
