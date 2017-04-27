@@ -1,0 +1,7 @@
+{
+	"diagnosisPath":"Diagnosis.txt",
+	"drugPath":"DrugNames.txt",
+	"departmentPath":"DepartmentNames.txt",
+	"inputPath":"input",
+	"outputPath":"output"
+}

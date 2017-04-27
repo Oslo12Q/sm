@@ -1,0 +1,173 @@
+* {
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+    text-decoration: none;
+}
+body {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.header {
+    position: relative;
+    width: 100%;
+    height: 50px;
+    background: #e36e4d;
+}
+
+.center>ul>li {
+    float: left;
+}
+
+.topImage {
+    position: absolute;
+    top: 50%;
+    margin: -15px 0px 0px 15px;
+    width: 30px;
+    height: 30px;
+}
+
+.topImage>a>img {
+    position: absolute;
+    z-index: 10;
+    width: 100%;
+}
+
+.topText {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+    width: 100px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    color: #fff;
+    font-size: 20px;
+}
+/*文件上传*/
+.upLoadFile{
+    position: relative;
+    width:100%;
+    height:150px;
+    text-align: center;
+    line-height: 150px;
+    border: 2px dashed #999;
+    font-size: 30px;
+    color:#999;
+}
+.upLoadFile>input{
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.upLoadFile>input>span{
+    position: absolute;
+    top: 0px;
+
+}
+.upInfo{
+    padding:5px;
+    display: none;
+}
+.mainImage{
+    width:100%;
+}
+.mainImage>.fileArea{
+    padding:10px;
+}
+/*图片预览*/
+.fileArea>.formDt>.showPreView>img{
+    width:100%;
+    display: block;
+}
+#upLoadSubmit{
+    background: transparent;
+    outline: none;
+    border: 0px;
+}
+/*按钮*/
+.upLoadImageSubmit{
+    width:100%;
+    height:50px;
+    border:2px solid #999;
+    text-align: center;
+    line-height: 50px;
+    border-radius: 5px;
+    margin-top:10px;
+}
+.mainTable{
+    padding-top:10px;
+    padding:10px;
+    display: none;
+}
+.mainTable>table {
+    width: 100%;
+}
+.info{
+    position: absolute;
+    top:50%;
+    left:50%;
+    margin-left: -50px;
+    color:#f0f0f0;
+    padding:10px 10px;
+    line-height: 30px;
+    text-align: center;
+    background: rgba(0,0,0,0.8);
+    border-radius:5px;
+    display: none;
+}
+.table1{
+    text-align: center;
+}
+#table1 tr:nth-child(odd){
+        background: #f0f0f0;
+    }
+    #table1{
+        border-collapse: collapse;
+    }
+    #table1 th{
+        padding:5px 0px;
+        border:1px solid #e5e5e5;
+
+    }
+    #table1 td{
+        padding:5px 0px;
+        border:1px solid #e5e5e5;
+    }
+    #tab td{
+        border-bottom:1px solid #f0f0f0;
+        width:50px;
+        padding:5px 0px;
+    }
+    #tab tr:nth-child(odd){
+        background: #f0f0f0;
+    }
+    #tab{
+        text-align: center;
+        border:1px solid #f0f0f0;
+        border-collapse: collapse;
+    }
+
+.hide {
+    height: 50px;
+}
+
+@media screen and (min-width: 800px){
+    .main>.mainImage{
+        width:90%;
+        max-height:600px;
+        margin:auto;
+    }
+    .fileArea>.formDt>.showPreView>img {
+        width: 100%;
+        height: 500px;
+        margin:auto;
+        display: block;
+    }
+}

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/static/css/index.css">
+    <link rel="stylesheet" href="/static/css/swiper-3.4.2.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="headerTop">
+                数美医疗
+            </div>
+            <div class="pop">
+                <div class="swiper-container">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide" style="background-image:url(/static/images/p3.jpg)"></div>
+                        <div class="swiper-slide" style="background-image:url(/static/images/p2.jpg)"></div>
+                        <div class="swiper-slide" style="background-image:url(/static/images/p1.jpg)"></div>
+                    </div>
+                    <div class="swiper-pagination swiper-pagination-white"></div>
+                </div>
+            </div>
+        </div>
+        <div class="main">
+            <ul class="b_list floatL">
+                <li class="first_list">
+                    <a href="/api/ocr/get_exhibition_index/" class="textStyle">
+                        <span>自助理赔</span>
+                    </a>
+                </li>
+                <li class="first_list">
+                    <a href="/api/ocr/list_exhibition_index/" class="textStyle">
+                        <span>健康管理</span>
+                    </a>
+                </li>
+                <li class="first_list">
+                    <a href="/api/ocr/case_report/" class="textStyle">
+                        <span>病例报告</span>
+                    </a>
+                </li>
+            </ul>
+            <ul class="r_list floatR">
+                <li class="sec_list">
+                    <a class="textStyle">
+                        <span>我的上传</span>
+                    </a>
+                </li>
+                <li class="sec_list">
+                    <a class="textStyle">
+                        <span>数据报告</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/swiper-3.4.2.min.js"></script>
+    <script src="/static/js/index.js"></script>
+</body>
+
+</html>

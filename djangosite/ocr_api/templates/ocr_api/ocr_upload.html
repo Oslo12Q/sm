@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>单据识别</title>
+    {% load staticfiles %}
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'css/dropzone.min.css' %}">
+    <style type="text/css">
+        .container {
+            /*margin-top: 70px;*/
+        }
+        .dz-row {
+            /*background-color: #E8E9EC;*/
+        }
+        .idcard-result-row {
+            /*background-color: #646C7F;*/
+            /*color: white;*/
+        }
+        .dropzone {
+            border: 2px dashed #0087F7;
+            border-radius: 5px;
+            background: white;
+            margin-top: 50px;
+            margin-bottom: 50px;
+        }
+        .dz-message-bold {
+            font-size: 30px;
+            font-weight: bold;
+        }
+        .dz-message-normal {
+            font-size: 25px;
+        }
+        .idcard-preview {
+            min-width: 300px;
+            min-height: 200px;
+            max-width: 500px;
+            max-height: 400px;
+        }
+        hr {
+            margin-top: 40px;
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h3>单据识别</h3>
+    <hr style="margin-top: 0;"/>
+    <div class="row dz-row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <form id="upload_form" class="dropzone"
+                  action="{% url 'sm.djangosite.ocr_api.views.views.async_analysis' %}"
+                  enctype="multipart/form-data" method="POST">
+                <div class="dz-message text-center">
+                    <span class="dz-message-normal">
+                        <span class="dz-message-bold">点击</span>或将文件<span class="dz-message-bold">拖拽</span>到这里进行上传
+                    </span>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+    <hr id="hr_tip" style="display: none;"/>
+    <div class="row idcard-result-row" style="display: none;">
+        <!-- <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3 style="display: inline-block;">上传预览：</h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <img id="idcard-preview" class="idcard-preview">
+                </div>
+            </div>
+        </div> -->
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3 style="display: inline-block;">识别结果：</h3>
+                    <strong><div id="progres_tip" style="display: inline-block; color: red;">正在进行云识别……</div></strong>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <img id="img_loading" style="display: none;" src="/static/ocr_api/loading.gif">
+                    <a id="result-doc-href" href='#' target="_blank" style="display: none;">Download ocr doc</a>
+                    <div id="result-block" style="display: none;"></div>
+                    <!-- <table id="result-table" class="table">
+                        <tbody>
+                        <tr>
+                            <td>姓名：</td>
+                            <td id="card-name"></td>
+                        </tr>
+                        <tr>
+                            <td>性别：</td>
+                            <td id="card-gender"></td>
+                        </tr>
+                        <tr>
+                            <td>民族：</td>
+                            <td id="card-volk"></td>
+                        </tr>
+                        <tr>
+                            <td>出生：</td>
+                            <td>
+                                <span id="card-year"></span>年
+                                <span id="card-month"></span>月
+                                <span id="card-day"></span>日
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>住址：</td>
+                            <td id="card-address"></td>
+                        </tr>
+                        <tr>
+                            <td>身份证号：</td>
+                            <td id="card-id-number"></td>
+                        </tr>
+                        </tbody>
+                    </table> -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <!-- <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3 style="display: inline-block;">使用提示：</h3>
+                    <span style="color: red;"><strong>请将单据放置于背景色差较为明显的平面、正对摄像头，以拍摄出最佳效果。</strong></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <img class="idcard-preview" src="/static/ocr_api/id-card-sample.jpg"/>
+                </div>
+                <div class="col-md-6"></div>
+            </div>
+        </div>
+    </div> -->
+</div>
+</body>
+<script type="text/javascript" src="{% static 'js/jquery-1.11.1.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/dropzone.min.js' %}"></script>
+<script type="text/javascript">
+    Dropzone.autoDiscover = false;
+    $('#upload_form').dropzone({
+        maxFiles: 1,
+        acceptedFiles: '.jpg, .png, .bmp, .gif',
+        maxfilesexceeded: function(file) {
+            this.removeAllFiles();
+            this.addFile(file);
+        },
+        sending: function(file) {
+            // $('#hr_tip').css('display', 'none');
+            // $('.idcard-result-row').css('display', 'none');
+            // $('#result-table').css('display', 'none');
+            // $('#idcard-preview').attr('src', '');
+            // $('#idcard-preview').css('display', 'none');
+            // $('#progres_tip').html('正在进行身份证云识别，请稍候……');
+            // $('#progres_tip').css('display', 'inline-block');
+        },
+        complete: function(file) {
+            // var that = this;
+            // $('#hr_tip').css('display', '');
+            // var timeout = setTimeout(function () {
+            //     that.removeAllFiles();
+            // }, 500);
+        },
+        success: function(file, response) {
+            if(response.status != 'ok') {
+                alert(response.message);
+                return false;
+            }
+            var file_id = response.data.fid;
+            console.log(file_id)
+
+            $('.idcard-result-row').css('display', '');
+            $('#idcard-preview').css('display', '');
+            // $('#img_loading').css('display', '');
+
+            get_ocr_result(file_id);
+        }
+    });
+    function get_ocr_result(fid) {
+        var url = '/api/ocr/async_analysis/result/?fid=' + fid + '&type=info';
+        console.log('Requesting ' + url);
+        $.get(url, function(data) {
+            if(data.status == 'error') {
+                alert(data.message);
+                $('#img_loading').css('display', 'none');
+                return;
+            }
+            // $('#result-table').css('display', '');
+            // $('#card-name').html(data.data['姓名']);
+            // $('#card-gender').html(data.data['性别']);
+            // $('#card-volk').html(data.data['民族']);
+            // $('#card-year').html(data.data['年']);
+            // $('#card-month').html(data.data['月']);
+            // $('#card-day').html(data.data['日']);
+            // $('#card-address').html(data.data['住址']);
+            // $('#card-id-number').html(data.data['身份证号']);
+            if(data.status == 'running') {
+                setTimeout(function() {
+                    get_ocr_result(fid);
+                }, 1000);
+                return;
+            }
+
+            $('#progres_tip').html('识别完成！');
+            $('#img_loading').css('display', 'none');
+            // $('#result-doc-href').attr('href', data.data.doc_path);
+            // $('#result-doc-href').css('display', '');
+
+            var json_str = '';
+            json_str += JSON.stringify(data.data, null, 4);
+            json_str = json_str.replace(/"(.+?)":/ig,'"<strong>$1</strong>":');
+            json_str = json_str.replace(/\n/ig,"<br/>");
+            json_str = json_str.replace(/\s/ig,"&nbsp;");
+
+            $('#result-block').html(json_str);
+            $('#result-block').css('display', '');
+
+            var timeout = setTimeout(function () {
+                $('#progres_tip').css('display', 'none');
+            }, 1000);
+        });
+    }
+</script>
+</html>
