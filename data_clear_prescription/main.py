@@ -68,7 +68,7 @@ class handlePrescription(object):
         self.infoDict["medicine"] = medicine(text, basicList, self.drugPath)
 
 
-    def handle(self,filename=None):
+    def handle(self,filenames=None):
         self.infoDict = {}
         result = {
             "prescription_information":[
@@ -90,6 +90,10 @@ class handlePrescription(object):
                 "费用":""
             }
         }
+        import zipfile
+        print filenames
+        filename = zipfile.ZipFile(filenames)
+        print filename
         if not filename:
             if self.fileIndex:
                 currTime = time.strftime(r"%Y-%m-%d %H.%M.%S", time.localtime())
