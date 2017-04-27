@@ -90,6 +90,7 @@ class handlePrescription(object):
                 "费用":""
             }
         }
+        print filenames
         import zipfile
         filename = zipfile.ZipFile(filenames)
 
