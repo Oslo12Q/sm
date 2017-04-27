@@ -89,11 +89,11 @@ $(function() {
                 var table_header="";
                 var numberlist=0;
                 table_header='<h3 style="text-align:center;">'+data.data['issential_information']['医院名称']+'</h3>'
-                table_info='<tr><td>姓名：'+data.data['issential_information']['姓名']+'</td><td>'+'性别：'+data.data['issential_information']['性别']+'</td><td>'+'年龄：'+data.data['issential_information']['年龄']+'</td><td>'+'费用：'+data.data['issential_information']['费用']+'</td></tr><tr><td>科室：'+data.data['issential_information']['科室']+'</td><td>医生：'+data.data['issential_information']['医生']+'</td><td>'+'时间：'+data.data['issential_information']['时间']+'</td></tr>';
+                table_info='<tr><td>姓名：'+data.data['issential_information']['姓名']+'</td><td>'+'性别：'+data.data['issential_information']['性别']+'</td><td>'+'年龄：'+data.data['issential_information']['年龄']+'</td><td>'+'费用：'+data.data['issential_information']['费用']+'</td></tr><tr><td>科室：'+data.data['issential_information']['科室']+'</td><td>医生：'+data.data['issential_information']['医生']+'</td><td colspan="2">'+'时间：'+data.data['issential_information']['时间']+'</td></tr>';
                 $.each(data.data["prescription_information"], function(index, data) {
                     $.each(data, function(index1, data2) {
                         numberlist++;
-                        table_str += '<tr><td>' + index1 + '：</td><td colspan="2"  style="text-align: left;>' + data2 + '</td></tr>';
+                        table_str += '<tr><td>' + index1 + '：</td><td colspan="3"  style="text-align: left;>' + data2 + '</td></tr>';
                     })
                 });
                 $('.mainTable').before(table_header);
