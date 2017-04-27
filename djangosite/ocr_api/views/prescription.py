@@ -53,7 +53,7 @@ def async_analysis_result(request):
     file_name = file_dest.replace('C:/output/', '')
     if not file_dest:
         return get_json_response(request, dict(status='running', message='analysis is running.', data=None))
-
+    print file_dest
     from sm.data_clear_prescription.main import *
     try:
         handle = handlePrescription()
@@ -70,7 +70,7 @@ def async_analysis_result(request):
         return get_json_response(request, dict(status='500', message='data_clear is 500.', data=None))
 
 def _get_analysis_result_path(fid):
-    for extension in ['.docx', '.pdf', '.xls', '.xlsx']:
+    for extension in ['.doc', '.pdf', '.xls', '.xlsx']:
         file_dest = 'C:/output/{}{}'.format(fid, extension)
         if os.path.exists(file_dest):
             return file_dest
