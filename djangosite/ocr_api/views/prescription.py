@@ -11,7 +11,6 @@ from datetime import datetime
 from django.shortcuts import render
 from django.http import HttpResponse
 
-
 def prescription(request):
     
     return render(request,'ocr_api/c_upload.html')
@@ -58,7 +57,7 @@ def async_analysis_result(request):
     from sm.data_clear_prescription.main import *
     try:
         handle = handlePrescription()
-        rsp_data = handle.handle('c:/test1.docx')
+        rsp_data = handle.handle('c:/2.docx')
         
         prescription_information, issential_information = rsp_data.get('prescription_information', {}), rsp_data.get('issential_information', [])
         result = dict(prescription_information=prescription_information, issential_information=issential_information)
