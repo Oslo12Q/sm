@@ -70,7 +70,7 @@ def async_analysis_result(request):
         return get_json_response(request, dict(status='500', message='data_clear is 500.', data=None))
 
 def _get_analysis_result_path(fid):
-    for extension in ['.doc', '.pdf', '.xls', '.xlsx']:
+    for extension in ['.doc']:
         file_dest = 'C:/output/{}{}'.format(fid, extension)
         if os.path.exists(file_dest):
             return file_dest
