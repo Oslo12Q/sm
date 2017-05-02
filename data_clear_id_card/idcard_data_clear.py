@@ -21,7 +21,6 @@ class result_info():
     result = ""
     result_data = ""
 
-
 # 数据格式清洗
 def data_clear(txt):
     txt = txt.replace(" ","")
@@ -36,7 +35,12 @@ def data_clear(txt):
     txt = txt.lstrip("\r\n")
     txt = txt.rstrip("\r\n")
     return txt
-
+# 主函数
+def main(filename):
+    try:
+        data_clear_main(file)
+    except Exception,e:
+        print e
 # 数据清理主函数
 def data_clear_main(filename):
     # 文件转换
@@ -261,15 +265,16 @@ def jieba_posseg(text):
     return res_list
 
 if __name__ == "__main__":
-    #path = "testdata/3.docx"
-    #data = data_clear_main(path)
-    #print json.dumps(data,ensure_ascii=False,indent=4)
+    path = "testdata/Id_card_20170502114310_4159.jpg.docx"
+    data = data_clear_main(path)
+    #print data
+    print json.dumps(data,ensure_ascii=False,indent=4)
     #datainfo = ""l
     #lis = list()
-    for i in range(1,7):
-        path = 'testdata/'+str(i)+'.docx'
-        data = data_clear_main(path)
-        print json.dumps(data,ensure_ascii=False,indent=4)
+    #for i in range(1,7):
+        #path = 'testdata/'+str(i)+'.docx'
+        #data = data_clear_main(path)
+        #print json.dumps(data,ensure_ascii=False,indent=4)
     #print json.dumps(lis,ensure_ascii=False,indent=4)
         #datainfo = datainfo + str(data)+"\n"
     #open('data.txt','w').write(str(datainfo))
