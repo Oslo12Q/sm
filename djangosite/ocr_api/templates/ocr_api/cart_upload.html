@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/cart_show.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="center">
+                <ul>
+                    <li class="topImage">
+                        <a href="/api/ocr/get_exhibition_index/">
+                            <img src="/static/images/houtui.png" alt="">
+                        </a>
+                    </li>
+                    <li class="topText">
+                        上传身份证图片
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="main">
+            <div class="mainImage">
+                <div class="fileArea">
+                <iframe name="id_iframe" style="display:none;"></iframe>
+                    <form target="id_iframe" class="formDt" id="upload_form" enctype="multipart/form-data">
+                        <div class="upLoadFile">
+                            <input type="file" name="img" class="fileUpload" style="opacity: 0">
+                            <span>点击上传身份证图片</span>
+                        </div>
+                        <div class="showPreView"></div>
+                    </form>
+                </div>
+            </div>
+            <div class="upInfo"><strong>识别结果：</strong><span style="color: red;">正在进行云识别 . . . . . </span></div>
+            <div class="mainTable">
+                <div class="MassageInfo">
+                    <div><span class="color">姓 名：</span><span class="info_name"></span></div>
+                    <div><span class="color">性 别：</span> <span class="info_sex"></span> <span class="color" style="padding-left:30px;">民 族：</span><span class="info_minzu"></span></div>
+                    <div><span class="color">出 生：</span><span class="info_br"></span></div>
+                    <div><span class="color">住 址：</span><span class="info_ads"></span></div>
+                    <div><span class="color">身份证号：</span><span class="info_number"></span></div>
+                    <div><span class="color">参考地址：</span><span class="info_c"></span></div>
+                </div>
+
+            </div>
+        </div>
+        <div class="info"></div>
+        <div class="footer">
+            <div class="bottom">
+            </div>
+        </div>
+    </div>
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/cart_upload.js"></script>
+</body>
+
+</html>

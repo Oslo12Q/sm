@@ -11,9 +11,9 @@ from datetime import datetime
 from django.shortcuts import render
 from django.http import HttpResponse
 
-def prescription(request):
+def id_card(request):
     
-    return render(request,'ocr_api/c_upload.html')
+    return render(request,'ocr_api/cart_upload.html')
 
 def get_json_response(request, json_rsp):
     return HttpResponse(json.dumps(json_rsp), content_type='application/json')
@@ -28,7 +28,7 @@ def async_analysis(request):
             return get_json_response(request, dict(status='error', message='file object not found.', data=None))
         file_obj = base64.b64decode(file_obj_base)  
     
-        file_name = 'prescription_{}_{}.jpg'.format(datetime.now().strftime("%Y%m%d%H%M%S"),random.randint(1000, 9999))
+        file_name = 'Id_card_{}_{}.jpg'.format(datetime.now().strftime("%Y%m%d%H%M%S"),random.randint(1000, 9999))
         file_dest = 'C:/input/{}'.format(file_name)
 
         writer = open(file_dest, 'wb+')
@@ -54,20 +54,19 @@ def async_analysis_result(request):
     if not file_dest:
         return get_json_response(request, dict(status='running', message='analysis is running.', data=None))
     print file_dest
-    from sm.data_clear_prescription.main import *
+    from sm.data_clear_id_card.idcard_data_clear import *
     try:
-        handle = handlePrescription()
-        rsp_data = handle.handle(file_dest)
-        
-        prescription_information, issential_information = rsp_data.get('prescription_information', {}), rsp_data.get('issential_information', [])
-        result = dict(prescription_information=prescription_information, issential_information=issential_information)
-        re = json.dumps(result,ensure_ascii=False)
-        print re
-        return get_json_response(request, dict(status='ok', message='success.', data=result))
+        rsp_data = data_clear_main(file_dest)
+        print rsp_data
+        #prescription_information, issential_information = rsp_data.get('prescription_information', {}), rsp_data.get('issential_information', [])
+        #result = dict(prescription_information=prescription_information, issential_information=issential_information)
+        #re = json.dumps(result,ensure_ascii=False)
+        #rint re
+        return get_json_response(request, dict(status='ok', message='success.', data=rsp_data))
     except Exception, err:
         logging.error(err)
         logging.error(traceback.format_exc())
-        return get_json_response(request, dict(status='500', message='data_clear_prescription is 500.', data=None))
+        return get_json_response(request, dict(status='500', message='idcard_data_clear is 500.', data=None))
 
 def _get_analysis_result_path(fid):
     for extension in ['.docx']:

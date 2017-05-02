@@ -37,6 +37,14 @@ urlpatterns += patterns(
 )
 
 urlpatterns += patterns(
+    'sm.djangosite.ocr_api.views.id_card',
+
+    (r'^id_card/$','id_card'),
+    (r'^id_card/async_analysis/$','async_analysis'),
+    (r'^id_card/async_analysis/result/$','async_analysis_result'),
+)
+
+urlpatterns += patterns(
     'sm.djangosite.ocr_api.views.medical_api',
 
     (r'^medical/analysis/$', 'analysis'),
