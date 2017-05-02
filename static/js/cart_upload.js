@@ -86,20 +86,13 @@ $(function() {
                 info_minzu,
                 info_number,
                 info_br;
-
-                $.ajax({
-                    url:'./id_cart.json',
-                    timeout:1,
-                    success:function(msg){
-                        $('.info_name').html(msg['姓名'])
-                        $('.info_sex').html(msg['性别'])
-                        $('.info_ads').html(msg['住址'])
-                        $('.info_minzu').html(msg['民族'])
-                        $('.info_number').html(msg['公民身份号码'])
-                        $('.info_br').html(msg['出生'])
-                        $('.info_c').html(msg['参考地址'])
-                    }
-                })
+                $('.info_name').html(data.data[0]['姓名'])
+                $('.info_sex').html(data.data[0]['性别'])
+                $('.info_ads').html(data.data[0]['住址'])
+                $('.info_minzu').html(data.data[0]['民族'])
+                $('.info_number').html(data.data[0]['公民身份号码'])
+                $('.info_br').html(data.data[0]['出生'])
+                $('.info_c').html(data.data[0]['参考地址'])
                 $('.mainTable').fadeIn();
                 $('.upInfo>span').html('识别完成!');
         });

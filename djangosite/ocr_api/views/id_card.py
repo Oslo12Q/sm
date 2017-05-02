@@ -57,11 +57,9 @@ def async_analysis_result(request):
     from sm.data_clear_id_card.idcard_data_clear import *
     try:
         rsp_data = data_clear_main(file_dest)
-        print rsp_data
-        #prescription_information, issential_information = rsp_data.get('prescription_information', {}), rsp_data.get('issential_information', [])
-        #result = dict(prescription_information=prescription_information, issential_information=issential_information)
-        #re = json.dumps(result,ensure_ascii=False)
-        #rint re
+        
+        re = json.dumps(rsp_data,ensure_ascii=False)
+        print re
         return get_json_response(request, dict(status='ok', message='success.', data=rsp_data))
     except Exception, err:
         logging.error(err)
