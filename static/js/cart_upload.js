@@ -79,7 +79,8 @@ $(function() {
                     info_ads,
                     info_minzu,
                     info_number,
-                    info_br;
+                    info_br,
+                    ads;
                 $('.info_name').html(data.data[0]['姓名'])
                 $('.info_sex').html(data.data[0]['性别'])
                 $('.info_ads').html(data.data[0]['住址'])
@@ -89,7 +90,27 @@ $(function() {
                 $('.info_c').html(data.data[0]['参考地址'])
                 $('.mainTable').fadeIn();
                 $('.upInfo>span').html('识别完成!');
+                ads = msg['info']['住址'];
+                showMap()
+                $('#allmap').fadeIn();
         });
+
+        function showMap() {
+            var map = new BMap.Map("allmap");
+            var point = new BMap.Point(116.404, 39.915);
+            map.centerAndZoom(point, 25)
+            var localSearch = new BMap.LocalSearch(map);
+            localSearch.enableAutoViewport();
+            function theLocation() {
+                map.centerAndZoom(ads, 20); 
+                localSearch.setSearchCompleteCallback(function(searchResult) {　　　　
+                    var poi = searchResult.getPoi(0);　　　　　　　
+                    map.centerAndZoom(poi.point, 20);　
+                    console.log(poi.point)　
+                });　　
+            }
+            theLocation()
+        }
     }
 
 })
