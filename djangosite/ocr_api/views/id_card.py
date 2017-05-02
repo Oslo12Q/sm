@@ -58,8 +58,8 @@ def async_analysis_result(request):
     try:
         rsp_data = data_clear_main(file_dest)
         
-        #re = json.dumps(rsp_data,ensure_ascii=False)
-        #print re
+        re = json.dumps(rsp_data,ensure_ascii=False)
+        print re
         return get_json_response(request, dict(status='ok', message='success.', data=rsp_data))
     except Exception, err:
         logging.error(err)

@@ -17,7 +17,6 @@ $(function() {
         }
     }
     fileChange();
-
     function fileChange() {
         $('.fileUpload').change(function() {
             var file = this.files[0];
