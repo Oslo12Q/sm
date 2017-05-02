@@ -92,7 +92,7 @@ $(function() {
                 $('.upInfo>span').html('识别完成!');
                 ads = data.data[0]['住址'];
                 showMap()
-                $('#allmap').fadeIn();
+                $('#allmap').show();
         });
 
         function showMap() {
