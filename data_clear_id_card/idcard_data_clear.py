@@ -38,13 +38,25 @@ def data_clear(txt):
 # 主函数
 def main(filename):
     try:
-        data_clear_main(file)
+        return data_clear_main(filename)
     except Exception,e:
         print e
+        data_info = list()
+        dic = dict()
+        dic["姓名"] = ""
+        dic["公民身份号码"] = ""
+        dic["性别"] = ""
+        dic["出生"] = ""
+        dic["住址"] = ""
+        dic["参考地址"] = ""
+        dic["民族"] = ""
+        data_info.append(dic)
+        return data_info
 # 数据清理主函数
 def data_clear_main(filename):
     # 文件转换
     txt = docx2txt.process(filename)
+    print txt
     txt = data_clear(txt)
     # 分词
     res1 = jieba_posseg(txt)
@@ -100,7 +112,8 @@ def get_sex(ori=""):
         if sex_id > 0:
             if sex_id % 2 == 0:
                 sex = "女"
-        return sex#get_address
+        return sex
+
 # get_address
 # ori->SourceString
 # str->SplitSTring
@@ -265,10 +278,12 @@ def jieba_posseg(text):
     return res_list
 
 if __name__ == "__main__":
-    path = "testdata/Id_card_20170502114310_4159.jpg.docx"
-    data = data_clear_main(path)
+    #path = "testdata/Id_card_20170502114310_4159.jpg.docx"
+    #data = data_clear_main(path)
+    #data = main(path)
+    #print json.dumps(data,ensure_ascii=False,indent=4)
     #print data
-    print json.dumps(data,ensure_ascii=False,indent=4)
+    #print json.dumps(data,ensure_ascii=False,indent=4)
     #datainfo = ""l
     #lis = list()
     #for i in range(1,7):

@@ -48,7 +48,7 @@ $(function() {
             }
 
         })
-    };
+    }
 
     function showInfo(infoText){
         $('.info').fadeIn().html(infoText);
