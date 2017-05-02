@@ -293,3 +293,4 @@ if __name__ == "__main__":
     #print json.dumps(lis,ensure_ascii=False,indent=4)
         #datainfo = datainfo + str(data)+"\n"
     #open('data.txt','w').write(str(datainfo))
+    pass
