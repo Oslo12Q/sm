@@ -21,42 +21,26 @@ class result_info():
     result = ""
     result_data = ""
 
+
 # 数据格式清洗
 def data_clear(txt):
     txt = txt.replace(" ","")
     txt = txt.replace("\n", "")
     txt = txt.replace("\r", "")
     txt = txt.replace("\t", "")
-    txt = txt.replace("丨", "")
-    txt = txt.replace("|", "")
-    txt = txt.replace("A","4")
+    txt = txt.replace("丨", "").replace("V","").replace("v","").replace("^","").replace(",","").replace(":","")
+    txt = txt.replace("|", "").replace("t","").replace(".","").replace("I","").replace("#","").replace("-","")
+    txt = txt.replace("A","4").replace("i","").replace("\U","").replace("r","").replace("m","").replace("<","").replace("»","").replace("•","")
     txt = txt.replace(" ","").replace("MWmHI","").replace("M","")
     txt = txt.strip("\r\n")
     txt = txt.lstrip("\r\n")
     txt = txt.rstrip("\r\n")
     return txt
-# 主函数
-def main(filename):
-    try:
-        return data_clear_main(filename)
-    except Exception,e:
-        print e
-        data_info = list()
-        dic = dict()
-        dic["姓名"] = ""
-        dic["公民身份号码"] = ""
-        dic["性别"] = ""
-        dic["出生"] = ""
-        dic["住址"] = ""
-        dic["参考地址"] = ""
-        dic["民族"] = ""
-        data_info.append(dic)
-        return data_info
+
 # 数据清理主函数
 def data_clear_main(filename):
     # 文件转换
     txt = docx2txt.process(filename)
-
     txt = data_clear(txt)
     # 分词
     res1 = jieba_posseg(txt)
@@ -68,7 +52,6 @@ def data_clear_main(filename):
 
     id_card = get_idcard(txt)
     dic["公民身份号码"] = id_card.result
-    #print  id_card.result_data
 
     dic["性别"] = get_sex(id_card.result)
 
@@ -81,7 +64,6 @@ def data_clear_main(filename):
     dic["民族"] = get_nation(txt)
 
     data_info.append(dic)
-    #print get_sex(id_card.result)
     return data_info
 # get_idcard
 def get_idcard(ori=""):
@@ -112,8 +94,7 @@ def get_sex(ori=""):
         if sex_id > 0:
             if sex_id % 2 == 0:
                 sex = "女"
-        return sex
-
+        return sex#get_address
 # get_address
 # ori->SourceString
 # str->SplitSTring
@@ -151,14 +132,22 @@ def get_address(ori="",str="",id_card=""):
         pass
     elif id_card:
         pass
-# get_address_test
+# 读取参考地址
 def get_address_test(id_card=""):
-    city_id = id_card[0:6]
+    city_code = id_card[0:6]
+    connection = MySQLdb.connect(host='127.0.0.1', user='root', passwd='root', db='shumei_medical', port=3306, charset='utf8')
+    sql = "select city_name from areazone where city_id = " + city_code
+    cursor = connection.cursor()
+    row = cursor.execute(sql)
+    line_first = cursor.fetchone()
+    if line_first :
+        data = line_first[0]
+        cursor.close()
+        connection.close()
+        return data
     return ""
-# get_address_idnex
-#def get_address_index():
 
-#get_nation
+# 读取民族
 # ori --> sourceString
 # str --> splitSTring
 def get_nation(ori="",str=""):
@@ -170,6 +159,8 @@ def get_nation(ori="",str=""):
             start1_last = ori.rfind("民")
             if start1 == start1_last:
                 start1 = -1
+            else:
+                start1 = start1_last - 1
             start2 = ori.find("族")
             if start1 != -1 and start2 != -1 and start1 < start2 :
                 start = start1 + 2
@@ -178,7 +169,7 @@ def get_nation(ori="",str=""):
             elif start1 == -1 and start2 != -1:
                 start = start2 + 1
             elif start2 == -1 and start1 != -1:
-                start = start2 + 2
+                start = start1 + 2
         else:
             start = start + 2
         end = ori.find("出生")
@@ -196,7 +187,6 @@ def get_nation(ori="",str=""):
         nation = ""
         if start != -1 and end != -1:
             nation = ori[start:end]
-            #print nation
         elif start != -1:
             nation = ori[start:start+1]
         elif end != -1:
@@ -280,17 +270,13 @@ def jieba_posseg(text):
 if __name__ == "__main__":
     #path = "testdata/Id_card_20170502114310_4159.jpg.docx"
     #data = data_clear_main(path)
-    #data = main(path)
     #print json.dumps(data,ensure_ascii=False,indent=4)
-    #print data
-    #print json.dumps(data,ensure_ascii=False,indent=4)
-    #datainfo = ""l
+    #datainfo = ""
     #lis = list()
-    #for i in range(1,7):
-        #path = 'testdata/'+str(i)+'.docx'
-        #data = data_clear_main(path)
-        #print json.dumps(data,ensure_ascii=False,indent=4)
+    for i in range(1,7):
+        path = 'testdata/'+str(i)+'.docx'
+        data = data_clear_main(path)
+        print json.dumps(data,ensure_ascii=False,indent=4)
     #print json.dumps(lis,ensure_ascii=False,indent=4)
         #datainfo = datainfo + str(data)+"\n"
     #open('data.txt','w').write(str(datainfo))
-    pass

@@ -56,7 +56,7 @@ def async_analysis_result(request):
     print file_dest
     from sm.data_clear_id_card.idcard_data_clear import *
     try:
-        rsp_data = main(file_dest)
+        rsp_data = data_clear_main(file_dest)
         
         re = json.dumps(rsp_data,ensure_ascii=False)
         print re
