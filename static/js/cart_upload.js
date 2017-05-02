@@ -43,7 +43,7 @@ $(function() {
                 var baseStr=base64.substr(23);
                 $('.upInfo').fadeIn();
                  $.ajax({
-                    url: '/id_card/async_analysis/',
+                    url: '/api/ocr/id_card/async_analysis/',
                     type: 'POST',
                     data: {fileData:baseStr},
                     success: function(msg) {
@@ -64,7 +64,7 @@ $(function() {
     };
         
    function get_ocr_result(fid) {
-        var url = '/id_card/async_analysis/result/?fid=' + fid + '&type=info';
+        var url = '/api/ocr/id_card/async_analysis/result/?fid=' + fid + '&type=info';
         $.get(url, function(data) {
             var stringJson=JSON.stringify(data);
                 if (data.status == 'error') {
