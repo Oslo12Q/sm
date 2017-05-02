@@ -56,7 +56,7 @@ def main(filename):
 def data_clear_main(filename):
     # 文件转换
     txt = docx2txt.process(filename)
-    print txt
+
     txt = data_clear(txt)
     # 分词
     res1 = jieba_posseg(txt)
