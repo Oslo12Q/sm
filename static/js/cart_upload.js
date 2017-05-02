@@ -1,9 +1,4 @@
 $(function() {
-    var table_str = "";
-    var table_header = "";
-    var table_th = "";
-    var h3;
-    var dataFor;
     var fileArea = $(".fileArea");
     var upLoadImg = document.createElement('img');
     function urlData() {
@@ -80,11 +75,11 @@ $(function() {
                     return;
                 }
                 var info_name,
-                info_sex,
-                info_ads,
-                info_minzu,
-                info_number,
-                info_br;
+                    info_sex,
+                    info_ads,
+                    info_minzu,
+                    info_number,
+                    info_br;
                 $('.info_name').html(data.data[0]['姓名'])
                 $('.info_sex').html(data.data[0]['性别'])
                 $('.info_ads').html(data.data[0]['住址'])

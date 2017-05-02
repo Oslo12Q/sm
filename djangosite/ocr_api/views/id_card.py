@@ -16,7 +16,7 @@ def id_card(request):
     return render(request,'ocr_api/cart_upload.html')
 
 def get_json_response(request, json_rsp):
-    return HttpResponse(json.dumps(json_rsp), content_type='application/json')
+    return HttpResponse(json.dumps(json_rsp),ensure_ascii=False, content_type='application/json')
 
 def async_analysis(request):
     try:
