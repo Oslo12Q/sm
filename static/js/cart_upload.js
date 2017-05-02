@@ -90,9 +90,9 @@ $(function() {
                 $('.info_c').html(data.data[0]['参考地址'])
                 $('.mainTable').fadeIn();
                 $('.upInfo>span').html('识别完成!');
-                ads = data.data[0]['住址'];
-                showMap()
                 $('#allmap').show();
+                showMap()
+                ads = data.data[0]['住址'];
         });
 
         function showMap() {
