@@ -133,11 +133,12 @@ def get_address(ori="",str="",id_card=""):
     elif id_card:
         pass
 # 读取参考地址
+from django.db import connection
 def get_address_test(id_card=""):
     city_code = id_card[0:6]
-    connection = MySQLdb.connect(host='127.0.0.1', user='root', passwd='root', db='shumei_medical', port=3306, charset='utf8')
+    #connection = MySQLdb.connect(host='127.0.0.1', user='root', passwd='root', db='shumei_medical', port=3306, charset='utf8')
     sql = "select city_name from areazone where city_id = " + city_code
-    cursor = connection.cursor()
+    cursor=connection.cursor()
     row = cursor.execute(sql)
     line_first = cursor.fetchone()
     if line_first :
