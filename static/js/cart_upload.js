@@ -91,10 +91,10 @@ $(function() {
             $('.info_c').html(data.data[0]['参考地址'])
             $('.mainTable').fadeIn();
             $('.upInfo>span').html('识别完成!');
-            if(ads!=''{
+            if(ads!=''){
                 $('#allmap').show();
                 showMap()
-            })
+            }
             function showMap(){
                 var map = new BMap.Map("allmap");
                 var point = new BMap.Point(116.331398,39.897445);
