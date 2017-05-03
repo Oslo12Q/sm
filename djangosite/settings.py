@@ -124,38 +124,42 @@ USE_L10N = True
 USE_TZ = True
 
 LOGGING = {
-    'version': 1,    
-    'disable_existing_loggers': True,    
-    'formatters': {        
-        'default': {            
-            'format': '%(asctime)s %(levelname)s %(message)s'        
-        },        
-        'simple': {            
-            'format': '%(levelname)s %(message)s'        
-        },    
-    },    
-    'handlers': { 
-        'console': {            
-            'level': 'DEBUG',            
-            'class': 'logging.StreamHandler',            
-            'formatter': 'simple'        
-        }
-    },    
-    'loggers': {        
-        'django.db.backends': {            
-            'handlers': ['console'],            
-            'level': 'ERROR',            
-            'propagate': False,        
-        },        
-        'django.request': {            
-            'handlers': ['console'],            
-            'level': 'ERROR',            
-            'propagate': True,        
-        },    
-    },    
-    'root': {        
-        'handlers': ['console'],        
-        'level': 'INFO',    
+    'version': 1,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'standard': {
+            'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
+        },
+    },
+    'handlers': {
+        'default': {
+            'level':'DEBUG',
+            'class':'logging.handlers.RotatingFileHandler',
+            'filename': '/django_log/all.log',
+            'maxBytes': 1024*1024*5, # 5 MB
+            'backupCount': 5,
+            'formatter':'standard',
+        },  
+        'request_handler': {
+            'level':'DEBUG',
+            'class':'logging.handlers.RotatingFileHandler',
+            'filename': '/django_log/request.log',
+            'maxBytes': 1024*1024*5, # 5 MB
+            'backupCount': 5,
+            'formatter':'standard',
+        },
+    },
+    'loggers': {
+        '': {
+            'handlers': ['default'],
+            'level': 'DEBUG',
+            'propagate': True
+        },
+        'django.request': {
+            'handlers': ['request_handler'],
+            'level': 'DEBUG',
+            'propagate': False
+        },
     }
 }
 
