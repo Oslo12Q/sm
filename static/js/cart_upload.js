@@ -61,56 +61,53 @@ $(function() {
         var url = '/api/ocr/id_card/async_analysis/result/?fid=' + fid + '&type=info';
         $.get(url, function(data) {
             var stringJson=JSON.stringify(data);
-                if (data.status == 'error') {
-                    return;
-                }
-                if (data.status == 'running') {
-                    setTimeout(function() {
-                        get_ocr_result(fid); 
-                    }, 1000);
-                    return;
-                }
-                if (data.status == '500') {
-                    $('.upInfo>span').html('无法正常识别！');
-                    return;
-                }
-                var info_name,
-                    info_sex,
-                    info_ads,
-                    info_minzu,
-                    info_number,
-                    info_br,
-                    ads;
-                ads = data.data[0]['住址'];
-                $('.info_name').html(data.data[0]['姓名'])
-                $('.info_sex').html(data.data[0]['性别'])
-                $('.info_ads').html(data.data[0]['住址'])
-                $('.info_minzu').html(data.data[0]['民族'])
-                $('.info_number').html(data.data[0]['公民身份号码'])
-                $('.info_br').html(data.data[0]['出生'])
-                $('.info_c').html(data.data[0]['参考地址'])
-                $('.mainTable').fadeIn();
-                $('.upInfo>span').html('识别完成!');
+            if (data.status == 'error') {
+                return;
+            }
+            if (data.status == 'running') {
+                setTimeout(function() {
+                    get_ocr_result(fid); 
+                }, 1000);
+                return;
+            }
+            if (data.status == '500') {
+                $('.upInfo>span').html('无法正常识别！');
+                return;
+            }
+            var info_name,
+                info_sex,
+                info_ads,
+                info_minzu,
+                info_number,
+                info_br,
+                ads;
+            ads = data.data[0]['住址'];
+            $('.info_name').html(data.data[0]['姓名'])
+            $('.info_sex').html(data.data[0]['性别'])
+            $('.info_ads').html(data.data[0]['住址'])
+            $('.info_minzu').html(data.data[0]['民族'])
+            $('.info_number').html(data.data[0]['公民身份号码'])
+            $('.info_br').html(data.data[0]['出生'])
+            $('.info_c').html(data.data[0]['参考地址'])
+            $('.mainTable').fadeIn();
+            $('.upInfo>span').html('识别完成!');
+            if(ads!=''{
                 $('#allmap').show();
                 showMap()
-       
-
-            function showMap() {
+            })
+            function showMap(){
                 var map = new BMap.Map("allmap");
-                var point = new BMap.Point(116.404, 39.915);
-                map.centerAndZoom(point, 25)
-                var localSearch = new BMap.LocalSearch(map);
-                localSearch.enableAutoViewport();
-                function theLocation() {
-                    map.centerAndZoom(ads, 20); 
-                    localSearch.setSearchCompleteCallback(function(searchResult) {　　　　
-                        var poi = searchResult.getPoi(0);　　　　　　　
-                        map.centerAndZoom(poi.point, 20);　
-                        console.log(poi.point)　
-                    });　　
-                }
-                theLocation()
+                var point = new BMap.Point(116.331398,39.897445);
+                map.centerAndZoom(point,11);
+                var myGeo = new BMap.Geocoder();
+                myGeo.getPoint(ads, function(point){
+                    if (point) {
+                        map.centerAndZoom(point, 20);
+                        map.addOverlay(new BMap.Marker(point));
+                    }
+                }, "北京市");
             }
+            
         })
     }
 
