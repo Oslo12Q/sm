@@ -34,12 +34,13 @@ $(function() {
                 upLoadImg.src = base64;
                 $('.showPreView').append(upLoadImg);
                 $('.upLoadFile').hide();
-                var baseStr=base64.substr(23);
+                var baseStr=base64.split(',');
+                var baStr=baseStr.pop();
                 $('.upInfo').fadeIn();
                  $.ajax({
                     url: '/api/ocr/id_card/async_analysis/',
                     type: 'POST',
-                    data: {fileData:baseStr},
+                    data: {fileData:baStr},
                     success: function(msg) {
                         var file_id = msg.data.fid;
                         get_ocr_result(file_id);
