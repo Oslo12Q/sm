@@ -68,6 +68,7 @@ $(function() {
     };
         
    function get_ocr_result(fid) {
+        addIndex++;
         var url = '/api/ocr/async_analysis/result/?fid=' + fid + '&type=info';
         $.get(url, function(data) {
             var stringJson=JSON.stringify(data);
@@ -84,7 +85,7 @@ $(function() {
                     $('.upInfo>span').html('无法正常识别！');
                     return;
                 }
-
+                
                 var table_str = "";
                 var table_info="";
                 var table_header="";
