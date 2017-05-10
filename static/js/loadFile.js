@@ -68,7 +68,6 @@ $(function() {
     };
         
    function get_ocr_result(fid) {
-        addIndex++;
         var url = '/api/ocr/async_analysis/result/?fid=' + fid + '&type=info';
         $.get(url, function(data) {
             var stringJson=JSON.stringify(data);
