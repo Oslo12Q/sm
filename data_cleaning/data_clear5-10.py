@@ -85,6 +85,7 @@ def data_clear(filename, sheetindex=0):
             if get_name(cell):
                 name = get_name(cell)
                 if name:
+                    #print name
                     info = {}
                     info.clear()
                     # 坐标（行号）以及信息例如: "1":"白细胞"
@@ -101,31 +102,29 @@ def data_clear(filename, sheetindex=0):
             #datainfo.append(dic)
     # 判断ｄｉｃｔ的长度推算出有已经识别出多少列
     length = len(datainfo)
+    #print json.dumps(datainfo,ensure_ascii=False,indent=4)
     if length > 0:
         # 读取所有存在指标的列的编号
         data_clos = datainfo.keys()
-        money_row_arr = []
-        un_monkey_row_arr = []
-        single_row_arr = []
-        arr = sorted(data_clos)
         if len(data_clos) % 2 == 0:
+            money_row_arr = []
+            un_monkey_row_arr = []
+            arr = sorted(data_clos)
             for clo in arr:
                 # 判断双列的情况是否存在
-                if clo + 1 in arr:
+                if clo + 1 in arr and clo not in un_monkey_row_arr:
                     # 将存在双列的列号存入数组中
                     money_row_arr.append(clo)
                     un_monkey_row_arr.append(clo + 1)
-                # 存放但列
-                elif clo not in un_monkey_row_arr:
-                    single_row_arr.append(clo)
             # 处理双列
             for clo in money_row_arr:
                 # 调用处理双列的方法 clo--> 存在指标的列编号,datainfo --> 指标信息 matched_cell -->　已经识别的指标信息 unmatched_cell -->　没有识别的指标信息
                 money_row(clo, datainfo, matched_cell, unmatched_cell, data)
-            # 处理单列
-            for clo in single_row_arr:
-                single_row(datainfo, matched_cell, unmatched_cell, clo, data)
         elif len(data_clos) % 2 != 0:
+            money_row_arr = []
+            single_row_arr = []
+            un_monkey_row_arr = []
+            arr = sorted(data_clos)
             for clo in arr:
                 # 判断双列的情况是否存在
                 if clo+1 in arr:
@@ -148,10 +147,13 @@ def data_clear(filename, sheetindex=0):
     # 显示列
     data_info = {u"indicators":matched_cell,"extra_info":info,u"unknown_indicators":unmatched_cell}
     return data_info
+    #print json.dumps(data_info, ensure_ascii=False, indent=4)
 
 
 # 双列处理
 def money_row(clo,datainfo,matched_cell,unmatched_cell,data):
+    #print json.dumps(datainfo, ensure_ascii=False, indent=4)
+    #import pdb;pdb.set_trace()
     first_clo = clo
     scond_clo = clo + 1
     # 第一列指标信息
@@ -214,6 +216,7 @@ def money_row(clo,datainfo,matched_cell,unmatched_cell,data):
                         matched = {}
                         matched.clear()
                         info = cell_data_clear(data.row_values(x)[scond_clo+1])
+                        #info = str(data.row_values(x)[scond_clo+1])
                         matched_name = y.get(key)
                         if info and matched_name:
                             matched[matched_name] = info
@@ -232,6 +235,7 @@ def money_row(clo,datainfo,matched_cell,unmatched_cell,data):
                 unmatched = {}
                 unmatched.clear()
                 unmatched_name = str(data.row_values(x)[first_clo])
+                #unmatched_info = str(data.row_values(x)[first_clo+2])
                 unmatched_info = cell_data_clear(data.row_values(x)[scond_clo+2])
                 if unmatched_name and unmatched_info :
                     unmatched[unmatched_name] = unmatched_info
@@ -247,6 +251,7 @@ def money_row(clo,datainfo,matched_cell,unmatched_cell,data):
                 unmatched1 = {}
                 unmatched1.clear()
                 unmatched1_name = str(data.row_values(x)[scond_clo])
+                #unmatched1_info = str(data.row_values(x)[scond_clo+1])
                 unmatched1_info = cell_data_clear(data.row_values(x)[scond_clo+1])
                 if unmatched_name and unmatched_info :
                     unmatched1[unmatched1_name] = unmatched1_info
@@ -266,59 +271,63 @@ def money_row(clo,datainfo,matched_cell,unmatched_cell,data):
 def single_row(datainfo,matched_cell,unmatched_cell,clo,data):
     # 从已经识别的指标行信息读取第一个数组信息作为下面遍历单列的数组集合
     arr = datainfo.get(clo)
+    #数据去重
+    arrs = remove_repeat(arr)
     # 存放已经识别的指标信息的行数所存放的行号
     rows = []
     # 将数组集合中读取所有的行数
-    for x in arr:
+    for x in arrs:
         rows.append(x.keys()[0])
+    # 指标值所存在的列ID
+    # int(clo)=int(clo)+1
     # 将行数组进行升序 排序
     sort_rows = sorted(rows)
+    #rows.sort()
+    #print u"行数组为:"
+    #print rows
     # 从行数组中读取第一个元素作为开始的标志
     start = rows[0]
     # 从行数组中读取最后一个元素作为结束的标志
     end = rows[len(rows)-1]
     # 利用start以及end 开始遍历
-    for x in range(start,end+1):
-        # 判断生成行是否在原有的行中存在
-        if x in rows:
-            # 遍历数据读取指标名词
-            for y in arr:
-                key = y.keys()[0]
-                #
-                if key == x :
-                    # 将匹配到的数据 按照字典的形式存放的 已识别指标的集合中
-                    matched = {}
-                    matched.clear()
-                    # 指标名
-                    matched_name = y.get(key)
-                    # 指标值
-                    matched_info = str(data.row_values(x)[clo + 1])
-                    if matched_name and matched_info :
-                        # 读取数据
-                        matched[matched_name] = matched_info
-                        matched_cell.append(matched)
-                        break
-                    elif matched_name and not matched_info:
-                        info1 = data.row_values(x + 1)[clo + 1]
-                        info2 = data.row_values(x + 2)[clo + 1]
-                        # 如果该行之后的第一行和第二行都为空,就读取该行之后的一列
-                        if not info1 and not info2:
-                            matched_info = str(data.row_values(x)[clo + 2])
-                            # 判断该行之后的一列是否有值
-                            if matched_info :
-                                matched[matched_name] = matched_info
-                                matched_cell.append(matched)
-                                break;
-            # 如果指标不存在将该信息存入未识别的指标里
+    for i in range(start,end+1):
+        try:
+            if i in rows:
+                for j in arrs:
+                    # 数组中key值
+                    key = j.keys()[0]
+                    # 判断集合中的key原数据是否存在
+                    if key == i:
+                        # 将匹配到的数据 按照字典的形式存放的 已识别指标的集合中
+                        matched = {}
+                        matched.clear()
+                        info = str(data.row_values(i)[clo+1])
+                        matched_name = j.get(key)
+                        if info and matched_name :
+                            # 读取数据
+                            matched[matched_name] = info
+                            matched_cell.append(matched)
+                            break
+                        else:
+                            info1 = data.row_values(i+1)[clo+1]
+                            info2 = data.row_values(i+2)[clo+1]
+                            if not info2 and not info1:
+                                info = str(data.row_values(i)[clo+2])
+                                if info:
+                                    # 读取数据
+                                    matched[matched_name] = info
+                                    matched_cell.append(matched)
+                                    break;     
             else:
                 unmatched = {}
                 unmatched.clear()
-                unmatched_name = str(data.row_values(x)[clo])
-                unmatched_info = str(data.row_values(x)[clo + 1])
-                if unmatched_name and unmatched_info:
+                unmatched_name = str(data.row_values(i)[clo])
+                unmatched_info = str(data.row_values(i)[clo+1])
+                if unmatched_name and unmatched_info :
                     unmatched[unmatched_name] = unmatched_info
                     unmatched_cell.append(unmatched)
-
+        except:
+            pass
 # 列表去重,然后重新排序
 def remove_repeat(data_list):
     arr = []
@@ -350,6 +359,8 @@ def remove_repeat(data_list):
 # 读取身份信息
 def extra_info(filename):
     data = load_excel(filename,0)
+    peopleinfo = pd.read_excel(filename)
+    tables = peopleinfo.as_matrix()
     age = ""
     sexy = ""
     check_time = ""
@@ -371,6 +382,7 @@ def extra_info(filename):
                 cell = str(data.row_values(rowindex)[cloindex]).decode('utf-8')
                 if cell:
                     cell = cell.replace(" ","")
+                    #print cell
                     if not age:
                         if re.search(agepat,cell):
                             age = re.search(agepat,cell).group(0)
@@ -482,6 +494,7 @@ def get_name(cell=""):
                 for dic in dic_result:
                     if id == dic_result[dic]:
                         name = dic_key.get(dic)
+                        #print  str(dic)+"\t"+cell
             return name
     return ""
 #方法-jieba词性标注
@@ -496,8 +509,8 @@ def jieba_posseg(txt):
 
 if __name__ == '__main__':
     #prefix_20170425163447_1707.jpg.xls
-    #data = data_clear("data_clear_test/17.xlsx")
-    #print json.dumps(data,ensure_ascii=False,indent=4)
+    #data = data_clear("data_clear_test/6.xlsx")
+    #print  json.dumps(data,ensure_ascii=False,indent=4)
     #get_name()
     # 单列 5、6、8、9、13、24、2(无法识别 原因：中英文()有括号)、10(原因GBK无法编码)、(11 数据找不到)、14(找不到数据 原因：指标乱码)、16(原因：无法读取数据,GBK编码)、21(数据不全面)、(22 找不到数据 原因：有空列)、(23 找不到数据  原因：乱码)、
     # 双排 7 、17、19、
@@ -541,3 +554,6 @@ if __name__ == '__main__':
         except:
             print  file_name + "-->err"
             pass'''
+    # 没有数据：11、12、14、15、18、20、22、23、3
+    # 有问题：4(数组越界)、10、(编码)、16(编码)、
+    # 没有问题1、2、5、6、7、8、(9)、10(不全面)、13、17、19、21、24、
