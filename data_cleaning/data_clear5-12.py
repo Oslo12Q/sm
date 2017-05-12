@@ -15,6 +15,13 @@ import jieba
 import jieba.posseg as pseg
 import Levenshtein
 
+# 字典加载
+def load_sta_data(filename):
+    std_data_path = '{}{}'.format(os.path.dirname(os.path.abspath(__file__)), filename)
+    sta = pd.read_csv(std_data_path)
+    sta_tables = sta.as_matrix()
+    return sta_tables
+
 #  excle文件加载
 def load_excel(filename, byindex=0):
     test_data = xlrd.open_workbook(filename,encoding_override='utf-8')
@@ -71,7 +78,7 @@ def data_clear(filename, sheetindex=0):
                 #　读取每一个单元格encode(“GBK“, ‘ignore’);
                 cell = str(data.row_values(rowindex)[cloindex]).decode('utf-8')
             except Exception,e:
-                continue
+                print e
             # cell单元格
             cell = cell_clear(cell)
             # 在字典中进行查找单元格中的值是否存在
@@ -141,7 +148,7 @@ def data_clear(filename, sheetindex=0):
     # 显示列
     data_info = {u"indicators":matched_cell,"extra_info":info,u"unknown_indicators":unmatched_cell}
     return data_info
-    #print json.dumps(data_info, ensure_ascii=False, indent=4)
+
 
 # 双列处理
 def money_row(clo,datainfo,matched_cell,unmatched_cell,data):
@@ -183,24 +190,16 @@ def money_row(clo,datainfo,matched_cell,unmatched_cell,data):
                     if x == key :
                         matched = {}
                         matched.clear()
-                        info = ""
-                        try:
-                            info = cell_data_clear(data.row_values(x)[first_clo + 2])
-                        except:
-                            continue
+                        #info = str(data.row_values(x)[first_clo+2])
+                        info = cell_data_clear(data.row_values(x)[first_clo+2])
                         matched_name = y.get(key)
                         if info and matched_name:
                             matched[matched_name] = info
                             matched_cell.append(matched)
                             break
                         else:
-                            info1 = ""
-                            info2 = ""
-                            try:
-                                info1 = cell_data_clear(data.row_values(x+1)[first_clo+2])
-                                info2 = cell_data_clear(data.row_values(x+2)[first_clo+2])
-                            except:
-                                continue
+                            info1 = cell_data_clear(data.row_values(x+1)[first_clo+2])
+                            info2 = cell_data_clear(data.row_values(x+2)[first_clo+2])
                             if not info1 and not info2:
                                 info = cell_data_clear(data.row_values(x)[first_clo+3])
                                 if info:
@@ -293,31 +292,18 @@ def single_row(datainfo,matched_cell,unmatched_cell,clo,data):
                     # 指标名
                     matched_name = y.get(key)
                     # 指标值
-                    matched_info = ""
-                    try:
-                        matched_info = str(data.row_values(x)[clo + 1])
-                    except:
-                        continue
+                    matched_info = str(data.row_values(x)[clo + 1])
                     if matched_name and matched_info :
                         # 读取数据
                         matched[matched_name] = matched_info
                         matched_cell.append(matched)
                         break
                     elif matched_name and not matched_info:
-                        info1 = ""
-                        info2 = ""
-                        try:
-                            info1 = data.row_values(x + 1)[clo + 1]
-                            info2 = data.row_values(x + 2)[clo + 1]
-                        except:
-                            continue
+                        info1 = data.row_values(x + 1)[clo + 1]
+                        info2 = data.row_values(x + 2)[clo + 1]
                         # 如果该行之后的第一行和第二行都为空,就读取该行之后的一列
                         if not info1 and not info2:
-                            matched_info = ""
-                            try:
-                                matched_info = str(data.row_values(x)[clo + 2])
-                            except:
-                                continue
+                            matched_info = str(data.row_values(x)[clo + 2])
                             # 判断该行之后的一列是否有值
                             if matched_info :
                                 matched[matched_name] = matched_info
@@ -328,11 +314,7 @@ def single_row(datainfo,matched_cell,unmatched_cell,clo,data):
                 unmatched = {}
                 unmatched.clear()
                 unmatched_name = str(data.row_values(x)[clo])
-                unmatched_info = ""
-                try:
-                    unmatched_info = str(data.row_values(x)[clo + 1])
-                except:
-                    continue
+                unmatched_info = str(data.row_values(x)[clo + 1])
                 if unmatched_name and unmatched_info:
                     unmatched[unmatched_name] = unmatched_info
                     unmatched_cell.append(unmatched)
@@ -385,7 +367,7 @@ def extra_info(filename):
         # 每行
         for rowindex in range(data.nrows):
             try:
-                #　读取每一个单元格
+                #　读取每一个单元格encode(“GBK“, ‘ignore’);
                 cell = str(data.row_values(rowindex)[cloindex]).decode('utf-8')
                 if cell:
                     cell = cell.replace(" ","")
@@ -408,20 +390,17 @@ def extra_info(filename):
                             #continue
                         else:
                             if cell.find("姓名") != -1:
-                                flag = False
                                 textSeg = jieba_posseg(cell)
-                                candidate = []
                                 for (word,tag) in textSeg:
                                     if word == u"姓名":
-                                        flag = True
                                         continue
                                     if tag in ["nr", "n"] and flag:
                                         candidate.append(word)
                                 #截取候选词前后的词
                                 for can in candidate:
-                                    start = cell.find(can) - 5
+                                    start = ori.find(can) - 5
                                     end = start + 5
-                                    if cell[start : end].find("姓名".decode('utf-8')) != -1:
+                                    if ori[start : end].find("姓名".decode('utf-8')) != -1:
                                         # 找到
                                         name = can
                     if not name:
@@ -467,7 +446,7 @@ def get_name_alias(alias):
     connection.close()
     return ""
 
-# 根据编辑距离读取指标名
+# 读取指标名
 def get_name(cell=""):
     if cell:
         name = ""
@@ -505,7 +484,6 @@ def get_name(cell=""):
                         name = dic_key.get(dic)
             return name
     return ""
-
 #方法-jieba词性标注
 #传入-txt字符串
 #输出-结果列表=[ [词，词性] ... ...]
@@ -518,7 +496,7 @@ def jieba_posseg(txt):
 
 if __name__ == '__main__':
     #prefix_20170425163447_1707.jpg.xls
-    #data = data_clear("data_clear_test/IMG_20170209_080109.jpg.xls")
+    #data = data_clear("data_clear_test/17.xlsx")
     #print json.dumps(data,ensure_ascii=False,indent=4)
     #get_name()
     # 单列 5、6、8、9、13、24、2(无法识别 原因：中英文()有括号)、10(原因GBK无法编码)、(11 数据找不到)、14(找不到数据 原因：指标乱码)、16(原因：无法读取数据,GBK编码)、21(数据不全面)、(22 找不到数据 原因：有空列)、(23 找不到数据  原因：乱码)、
@@ -545,8 +523,7 @@ if __name__ == '__main__':
             file_data.write(json.dumps(data, ensure_ascii=False, indent=4))
             print  file_path+".txt-->ok"
             file_data.close()
-        except Exception,e:
-            print e
+        except:                                                                                                                     
             print file_path+"-->err"
             pass'''
     '''for i in range(1,24):                                                                            
